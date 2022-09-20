@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloned Page</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <Script>
+        $(document).ready(() => {
+            let html
+            let img = "<img src='http://ec2-3-6-91-214.ap-south-1.compute.amazonaws.com//static/images/login.png'>"
+            $.ajax({
+                url: "http://ec2-3-6-91-214.ap-south-1.compute.amazonaws.com/",
+                success: function (data) {
+                    html = data
+                    display_html()
+                }
+            })
+            function display_html() {
+                $("body").append(html)
+                $("img").remove()
+                $(".p-3").append(img)
+
+                $(".login-button").click(() => {
+                    console.log("click")
+                    let data = {
+                        "email": $('#email').val(),
+                        "password": $("#password").val()
+                    }
+                    $.ajax({
+                        url: "http://ec2-3-6-91-214.ap-south-1.compute.amazonaws.com/api/login",
+                        type: "post",
+                        data: JSON.stringify(data),
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        success: function (result) {
+                            window.location.href = `http://ec2-3-6-91-214.ap-south-1.compute.amazonaws.com/dashboard`
+                        },
+                        error: function (result) {
+                            Swal.fire(
+                                'Uh Oh!',
+                                result.responseJSON.message,
+                                'error'
+                            )
+                        }
+                    })
+                })
+            }
+        })
+    </Script>
+</body>
+
+</html>
